@@ -2,14 +2,11 @@
 data <- read.table("household_power_consumption.txt", header = TRUE, sep=";", stringsAsFactors = FALSE)
 data$Date <- as.Date(data$Date, format = "%d/%m/%Y")
 data <- subset(data, Date == "2007-02-01" | Date == "2007-02-02")
+datetime <- strptime(paste(data$Date, data$Time), format = "%Y-%m-%d %H:%M:%S")
 
 #Construct the plot
 png(filename = "plot2.png")
-x <- seq_along(data$Global_active_power)
-plot(x, data$Global_active_power, xaxt = "n", yaxt = "n", xlab = "", ylab = "Global Active Power (kilowatts)", type = "n")
-lines(x, data$Global_active_power)
+plot(datetime, data$Global_active_power, xlab = "", ylab = "Global Active Power (kilowatts)", type = "l")
 
-#Put ticks in axis
-axis(side = 2, at = c(0,2,4,6))
-axis(side = 1, at = c(1,median(x),length(x)+1), label=c("Thu","Fri","Sat"))
+#Close device
 dev.off()
